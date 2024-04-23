@@ -1,1 +1,0 @@
-The modularity in js files is not working here.
