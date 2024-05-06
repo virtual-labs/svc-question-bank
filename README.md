@@ -1,63 +1,32 @@
-# svc-question-bank
-This repository containe the question-bank service 
-
 # Technical Documentation: Virtual Labs Question Bank Service
 
 ## Table of Contents
 
-- [svc-question-bank](#svc-question-bank)
-- [Technical Documentation: Virtual Labs Question Bank Service](#technical-documentation-virtual-labs-question-bank-service)
-	- [Table of Contents](#table-of-contents)
-	- [Introduction](#introduction)
-		- [Overview of Service:-](#overview-of-service-)
-		- [Purpose and scope of Technical Documentation:-](#purpose-and-scope-of-technical-documentation-)
-	- [Architecture and Technologies](#architecture-and-technologies)
-		- [Firebase Services](#firebase-services)
-		- [Firebase Services with Express.js](#firebase-services-with-expressjs)
-		- [Frontend (React + Material-UI)](#frontend-react--material-ui)
-		- [Architecture Diagram](#architecture-diagram)
-	- [Installations and System Requirements](#installations-and-system-requirements)
-		- [Hardware](#hardware)
-		- [Software Dependencies](#software-dependencies)
-			- [For React App:](#for-react-app)
-			- [For Express Server:](#for-express-server)
-		- [Installation Steps](#installation-steps)
-			- [React App](#react-app)
-			- [Express Server](#express-server)
-		- [Running the Application](#running-the-application)
-			- [React App](#react-app-1)
-			- [Express Server](#express-server-1)
-	- [API Documentation](#api-documentation)
-		- [Authentication](#authentication)
-		- [Endpoints](#endpoints)
-			- [GET All Questions](#get-all-questions)
-			- [GET Questions by tags](#get-questions-by-tags)
-			- [GET Questions by Contributor's Email](#get-questions-by-contributors-email)
-			- [GET Questions by difficulty](#get-questions-by-difficulty)
-			- [GET Questions by Multiple Parameters at a time](#get-questions-by-multiple-parameters-at-a-time)
-			- [GET Question by Question ID:-](#get-question-by-question-id-)
-			- [Create Questions](#create-questions)
-			- [DELETE a Question](#delete-a-question)
-			- [UPDATE a Question](#update-a-question)
-	- [Database and Question Schema](#database-and-question-schema)
-		- [Description of Database](#description-of-database)
-		- [Description of Question Schema](#description-of-question-schema)
-	- [Backend Infrastructure](#backend-infrastructure)
-	- [Security Measures](#security-measures)
-		- [Security Best Practices](#security-best-practices)
-		- [Handling Sensitive Information](#handling-sensitive-information)
-		- [Additional Security Measures](#additional-security-measures)
-	- [Authentication and Authorization](#authentication-and-authorization)
-	- [Secrets](#secrets)
-	- [Web Application Code Structure](#web-application-code-structure)
-		- [Overview](#overview)
-		- [Code Structure](#code-structure)
-		- [Screens Overview](#screens-overview)
-	- [Backend Code Structure](#backend-code-structure)
-		- [File and Folder Descriptions](#file-and-folder-descriptions)
-	- [Testing](#testing)
-	- [](#)
-	- [Deployment Process](#deployment-process)
+- [Introduction](#introduction)
+  - [Overview of Service](#overview-of-service)
+  - [Purpose and Scope of Documentation](#purpose-and-scope-of-technical-documentation)
+- [Architecture and Technologies](#architecture-and-technologies)
+  - [Firebase Servies](#firebase-services)
+  - [Firebase Services with Express JS](#firebase-services-with-expressjs)
+  - [Frontend (React + MaterialUI)](#frontend-react--material-ui)
+  - [Architecture Diagram](#architecture-diagram)
+- [Installation and System Requirements](#installations-and-system-requirements)
+  - [Hardware](#hardware)
+  - [Software Dependencies](#software-dependencies)
+  - [Installation Steps](#installation-steps)
+- [API documentation](#api-documentation)
+  - [Authentication](#authentication)
+  - [End Points](#endpoints)
+- [Database and Question Schema](#database-and-question-schema)
+- [Backend Infrastructure](#backend-infrastructure)
+- [Security Measures](#security-measures)
+- [Authentication and Authorization](#authentication-and-authorization)
+- [Secrets](#secrets)
+- [Web Application Code Strucuture](#web-application-code-structure)
+- [Backend Code Structure](#backend-code-structure)
+- [Testing](#testing-1)
+- [Deployment Process](#deployment)
+- [Possible Updates and Maintenance](#possible-updates-and-maintenance)
 
 ## Introduction
 
@@ -84,6 +53,9 @@ The purpose of technical documentation is to provide comprehensive guidance and 
 - **React Components:** UI components and pages built using React for dynamic user interfaces.
 - **Material-UI:** Used for styling components and following Material Design principles.
 - **API Integration:** Frontend interacts with Firebase services through API calls to Express.js endpoints.
+
+### Testing
+- **Selenium:** Selenium was used as a testing FrameWork along with PYTEST 
 
 ### Architecture Diagram
 
@@ -338,6 +310,8 @@ Each question in the `questions` collection follows the following JSON schema:
 
 - Handles connections to Google Firebase
 
+
+
 ## Security Measures
 
 ### Security Best Practices
@@ -461,21 +435,121 @@ This structure organizes the backend codebase into logical components, making it
 
 
 
-## Testing 
+## Testing
+
+### Overview
+
+The testing of our Question Bank service is performed using Selenium, an open-source testing framework, and Python scripting. Selenium allows us to automate browser interactions and simulate user actions for comprehensive testing of the web application.
+
+### Testing Process
+
+AUTOMATED TESTING is done using SELENIUM along with Pytest as framework
+
+1. **Installation**
+
+   - Ensure you have Python installed on your machine. You can download Python from the official website: [Python Downloads](https://www.python.org/downloads/).
+   - Install Selenium using pip:
+     ```
+     pip install selenium
+     ```
+   - Also , we have used CROME DRIVER as WebDriver for the service.
+
+2. **Running Tests**
+
+   - Execute the Python test scripts using the command line or an integrated development environment (IDE) like PyCharm or Visual Studio Code.
+   - The scripts are provided in folder Testing in the SVC-QUESTION-BANK Repo :-
+     [Github  Repo](https://github.com/virtual-labs/svc-question-bank)
+   - To run the tests, navigate to the `Testing` folder in the repository.
+   - Execute the Python test scripts using the command line or an integrated development environment (IDE) like PyCharm or Visual Studio Code.
+   - Use the following command to run a specific test file using pytest:
+     ```
+     pytest name_of_file_in_testing.py
+     ```
+   - Ensure that the backend server and the frontend application are running and accessible during the testing process.
+   - Execute the following command to run all test files using pytest:
+     ```
+     pytest
+     ```
+3. **Docs** 
+
+   - The information about the tests written is provided in the doc below:-
+      [Link]()
+
+
+
+## Deployment 
+
+1. **Frontend**
+   - Frontend REACT APP has been deployed in Firebase 
+
+2. **Backend**
+   - Backend Express JS app has been deployed on Google App Engine
+
+
+## Possible Updates and Maintenance
+
+### 1. Increased Authorization of API Calls
+
+- Explore alternative methods for protecting access tokens in API calls to enhance security and prevent unauthorized access.
+
+### 2. Separation of Roles
+
+- Implement role-based access control (RBAC) with roles such as ADMIN, Contributor, General Users, and Developers.
+- Define permissions and functionalities based on user roles for better access control.
+
+### 3. Super User Authorization
+
+- Introduce an additional layer of authorization for super users (e.g., Admins) with elevated privileges and security measures.
+
+### 4. Functionalities Based on Roles
+
+- Define specific functionalities based on user roles:
+  - Admins: CRUD operations, managing user roles, adding system tags.
+  - General Users: Accessing and downloading questions.
+  - Contributors: Adding and retrieving questions.
+
+### 5. Credit System
+
+- Implement a credit system where users earn credits for adding questions and spend credits for retrieving questions.
+- Enhance user engagement and incentivize contributions to the question bank.
+
+### 6. Plagiarism Check for Questions
+
+- Integrate an extensive plagiarism check system to detect and prevent plagiarism in questions added to the question bank.
+- Ensure content originality and quality in the question bank.
+
+### 7. Selective Access Based on Credits
+
+- Provide selective access to questions based on the user's credit limit.
+- Users can view and access questions within their credit limit, promoting fair usage and resource management.
+
+### 8. Tag Addition System
+
+- Allow users (Admins or designated roles) to add new tags to the system for better categorization and organization of questions.
+
+### 9. Adding image addition to all options:-
+- Allow users to add images to options in addition to presently added feature to only Question.
+
+## Maintenance Considerations
+
+- Regularly update and maintain the question bank service to ensure security, performance, and reliability.
+- Conduct periodic security audits and vulnerability assessments to address potential risks and threats.
+- Monitor system usage, performance metrics, and user feedback to identify areas for improvement and optimization.
+
+## Note
+
+- These updates and maintenance activities aim to enhance the functionality, security, and user experience of the question bank service.
+- Collaborate with developers, stakeholders, and users to prioritize and implement these updates effectively.
 
 
 
 
 
 
-## 
 
 
 
-## Deployment Process
 
-[Placeholder: Details about the deployment process are yet to be provided.]
 
-```
 
-```
+
