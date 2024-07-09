@@ -165,7 +165,7 @@ const get_github = async (req, res) => {
 
                 console.log(jsonData);
 
-                const postResponse = await fetch('http://localhost:3001/api/questions', {
+                const postResponse = await fetch('https://vlabs-question-bank.el.r.appspot.com/api/questions', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
