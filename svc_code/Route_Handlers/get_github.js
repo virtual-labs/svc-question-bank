@@ -29,6 +29,7 @@ const get_github = async (req, res) => {
         // Extract the first line since it's guaranteed to be the longest due to the filter
         let Exp_Name = lins.length > 0 ? lins[0].replace(/^#+/, '').trim() : null;
         console.log("Experiment Name: ", Exp_Name);
+
         // Step 2: Retrieve tags from public Google Sheets
         const sheetId = '1x12nhpp0QvnsA6x-O1sV4IA9SAbfVsq_wiexWkutOmU';
         const gid = '1722069818';
@@ -82,8 +83,7 @@ const get_github = async (req, res) => {
             return filteredRecord;
         });
 
-
-        const experimentIndex = headers.indexOf('Source Repo ');
+        const experimentIndex = headers.indexOf('Source Repo');
         const tagsIndex = headers.indexOf('Tags');
         console.log(tagsIndex, " ", experimentIndex);
         let Exp_Tags;
@@ -110,42 +110,46 @@ const get_github = async (req, res) => {
         // Step 3: Check for 'experiment-descriptor.json' in the root directory
         const descriptorUrl = `https://raw.githubusercontent.com/${repoPath}/main/experiment-descriptor.json`;
         const descriptorResponse = await fetch(descriptorUrl);
-        if (!descriptorResponse.ok) {
-            console.error(`Network response was not ok: ${descriptorResponse.statusText}`);
-            return res.status(descriptorResponse.status).send('Error fetching the descriptor file');
-        }
-
-        const descriptorData = await descriptorResponse.json();
         let Exp_Source_files = [];
 
-        const traverseLearningUnits = (units, baseDir) => {
-            units.forEach(unit => {
-                if (unit['unit-type'] === 'lu') {
-                    const newBaseDir = `${baseDir}/${unit['basedir']}`;
-                    traverseLearningUnits(unit.units, newBaseDir);
-                } else if (unit['content-type'] === 'assesment') {
-                    const sourcePath = `${baseDir}/${unit.source}`;
-                    Exp_Source_files.push(sourcePath);
-                }
-            });
-        };
+        if (descriptorResponse.ok) {
+            const descriptorData = await descriptorResponse.json();
+            const traverseLearningUnits = (units, baseDir) => {
+                units.forEach(unit => {
+                    if (unit['unit-type'] === 'lu') {
+                        const newBaseDir = `${baseDir}/${unit['basedir']}`;
+                        traverseLearningUnits(unit.units, newBaseDir);
+                    } else if (unit['content-type'] === 'assesment') {
+                        const sourcePath = `${baseDir}/${unit.source}`;
+                        Exp_Source_files.push(sourcePath);
+                    }
+                });
+            };
+            traverseLearningUnits(descriptorData.units, '');
+        } else {
+            // Check for pretest.json and posttest.json if descriptor fetch fails
+            const pretestUrl = `https://raw.githubusercontent.com/${repoPath}/main/experiment/pretest.json`;
+            const posttestUrl = `https://raw.githubusercontent.com/${repoPath}/main/experiment/posttest.json`;
 
-        traverseLearningUnits(descriptorData.units, '');
+            const pretestResponse = await fetch(pretestUrl);
+            const posttestResponse = await fetch(posttestUrl);
+
+            if (pretestResponse.ok) {
+                Exp_Source_files.push('/pretest.json');
+            }
+            if (posttestResponse.ok) {
+                Exp_Source_files.push('/posttest.json');
+            }
+        }
 
         console.log('Assessment Source Files:', Exp_Source_files);
 
         if (Exp_Source_files.length == 0) {
-            // return res.status(200).send('No JSON file present in REPO');
-
             const jsonResponse = { message: 'No JSON file present in REPO' };
-
-            // Send the JSON object as the response
             return res.status(200).json(jsonResponse);
-
-
         }
+
         // Fetch all JSON files
-        const selectedTags = JSON.stringify(Exp_Tags);
         const fetchedJsonFiles = await Promise.all(
             Exp_Source_files.map(async sourceFile => {
                 const fileUrl = `https://raw.githubusercontent.com/${repoPath}/main/experiment${sourceFile}`;
@@ -165,7 +169,7 @@ const get_github = async (req, res) => {
 
                 console.log(jsonData);
 
-                const postResponse = await fetch('http://localhost:3001/api/questions', {
+                const postResponse = await fetch('https://vlabs-question-bank.el.r.appspot.com/api/questions', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -175,7 +179,6 @@ const get_github = async (req, res) => {
                 });
 
                 if (!postResponse.ok) {
-
                     console.error(`Failed to post data: ${postResponse.statusText}`);
                     console.log(sourceFile);
                     return null;
@@ -191,14 +194,13 @@ const get_github = async (req, res) => {
 
         if (successfulResponses.length === 0) {
             const jsonResponse = { message: 'No Version Supported' };
-
-            // Send the JSON object as the response
             return res.status(200).json(jsonResponse);
-
         }
 
-        res.json(successfulResponses);
-    } catch (error) {
+        const jsonResponse = { status: 'success' };
+        return res.status(200).json(jsonResponse);
+    }
+    catch (error) {
         console.error('Error:', error);
         res.status(500).send('Internal Server Error');
     }

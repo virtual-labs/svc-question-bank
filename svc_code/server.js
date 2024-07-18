@@ -1,13 +1,13 @@
 const express = require('express');
 const cors = require('cors');
+// const fetch = require('node-fetch');
 const middleware = require('./middleware/index.js');
 const { db, admin } = require('./firebase.js');
 
 const collectionRef = db.collection('questions');
+
 const settings = { ignoreUndefinedProperties: true };
 collectionRef.firestore.settings(settings);
-
-const app = express();
 
 const corsOptions = {
   origin: 'https://vlabs-question-bank.web.app', // Your front-end origin
@@ -16,9 +16,12 @@ const corsOptions = {
   optionsSuccessStatus: 204
 };
 
+
+const app = express();
 app.use(cors(corsOptions));
 app.use(express.json()); // Parse JSON bodies
 app.use(middleware.decodeToken);
+
 
 const { get_search_and_difficulty } = require('./Route_Handlers/get_multiple.js');
 const { get_id } = require('./Route_Handlers/get_single.js');
@@ -33,12 +36,15 @@ app.get('/api/questions/:id', get_id);
 app.post('/api/questions', post_questions);
 app.delete('/api/questions/:id', delete_ques);
 app.patch('/api/questions/:id', update_ques);
-app.get('/fetch-github-file', get_github);
+
+
+app.get('/fetch-github-file',get_github);
 
 // New route to get tags from Firestore
 app.get('/api/tags', async (req, res) => {
   try {
     const tagsDoc = await db.collection('Tags').doc('Tags').get();
+    // console.log(tagsDoc);
     if (!tagsDoc.exists) {
       return res.status(404).send('Tags document not found');
     }
@@ -48,6 +54,7 @@ app.get('/api/tags', async (req, res) => {
       return res.status(404).send('No tags found in the document');
     }
 
+    // console.log(tagsData.tags);
     res.json({ tags: tagsData.tags });
   } catch (error) {
     console.error('Error fetching tags:', error);
