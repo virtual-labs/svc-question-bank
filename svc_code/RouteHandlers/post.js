@@ -1,11 +1,12 @@
 const { log } = require('console');
-const { db, admin } = require('../firebase');
-const validationMap = require('../validationMap');
+const { db, admin } = require('../server/firebase');
+const validationMap = require('../validators/validationMap');
 
 const post_questions = async (req, res) => {
   try {
     const { version, questions } = req.body;
-
+    // console.log(version);
+    // console.log(questions);
     // Validate that the request body contains a version and questions
     if (!version || !Array.isArray(questions) || questions.length === 0) {
       return res.status(400).json({
@@ -21,6 +22,8 @@ const post_questions = async (req, res) => {
     // Check if the version is supported and validate accordingly
     const validate = validationMap[version];
     if (!validate) {
+      // console.log(2);
+
       return res.status(400).json({
         status: 'error',
         message: `Unsupported version ${version}`
@@ -40,6 +43,7 @@ const post_questions = async (req, res) => {
 
       // Validate question based on its version schema
       if (!validate(question)) {
+        // console.log(1);
         return res.status(400).json({
           status: 'error',
           message: `Invalid question format or missing required fields for version ${version}`
@@ -56,7 +60,7 @@ const post_questions = async (req, res) => {
           }
         });
       }
-
+      // console.log(question);
       // Create new question document in Firestore
       const newQuestionRef = await db.collection('questions').add(question);
       createdQuestions.push({ id: newQuestionRef.id });

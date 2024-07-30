@@ -14,21 +14,21 @@ const get_github = async (req, res) => {
         // Step 1: Convert repo link to raw GitHub user link for the markdown file
         const fetch = (await import('node-fetch')).default;
         const repoPath = url.replace('https://github.com/', '');
-        const markdownUrl = `https://raw.githubusercontent.com/${repoPath}/main/experiment/experiment-name.md`;
+        // const markdownUrl = `https://raw.githubusercontent.com/${repoPath}/main/experiment/experiment-name.md`;
 
-        // Fetch the markdown file
-        const response = await fetch(markdownUrl);
-        if (!response.ok) {
-            console.error(`Network response was not ok: ${response.statusText}`);
-            return res.status(response.status).send('Error fetching the markdown file');
-        }
+        // // Fetch the markdown file
+        // const response = await fetch(markdownUrl);
+        // if (!response.ok) {
+        //     console.error(`Network response was not ok: ${response.statusText}`);
+        //     return res.status(response.status).send('Error fetching the markdown file');
+        // }
 
-        const markdownData = await response.text();
-        const lins = markdownData.split('\n').filter(line => /^#+/.test(line));
+        // const markdownData = await response.text();
+        // const lins = markdownData.split('\n').filter(line => /^#+/.test(line));
 
-        // Extract the first line since it's guaranteed to be the longest due to the filter
-        let Exp_Name = lins.length > 0 ? lins[0].replace(/^#+/, '').trim() : null;
-        console.log("Experiment Name: ", Exp_Name);
+        // // Extract the first line since it's guaranteed to be the longest due to the filter
+        // let Exp_Name = lins.length > 0 ? lins[0].replace(/^#+/, '').trim() : null;
+        // console.log("Experiment Name: ", Exp_Name);
 
         // Step 2: Retrieve tags from public Google Sheets
         const sheetId = '1x12nhpp0QvnsA6x-O1sV4IA9SAbfVsq_wiexWkutOmU';
@@ -85,7 +85,7 @@ const get_github = async (req, res) => {
 
         const experimentIndex = headers.indexOf('Source Repo');
         const tagsIndex = headers.indexOf('Tags');
-        console.log(tagsIndex, " ", experimentIndex);
+        // console.log(tagsIndex, " ", experimentIndex);
         let Exp_Tags;
         for (const row of rows) {
             if (row[headers[experimentIndex]] !== undefined) {
@@ -94,7 +94,7 @@ const get_github = async (req, res) => {
             if (row[headers[experimentIndex]] === url) {
                 try {
                     const Tag_list = row[headers[tagsIndex]];
-                    console.log(Tag_list);
+                    // console.log(Tag_list);
 
                     // Split the Tag_list string by commas, trim any extra spaces, and convert to lowercase
                     Exp_Tags = Tag_list.split(',').map(tag => tag.trim().toLowerCase());
@@ -105,7 +105,7 @@ const get_github = async (req, res) => {
                 break;
             }
         }
-        console.log('Experiment Tags:', Exp_Tags);
+        // console.log('Experiment Tags:', Exp_Tags);
 
         // Step 3: Check for 'experiment-descriptor.json' in the root directory
         const descriptorUrl = `https://raw.githubusercontent.com/${repoPath}/main/experiment-descriptor.json`;
@@ -142,7 +142,7 @@ const get_github = async (req, res) => {
             }
         }
 
-        console.log('Assessment Source Files:', Exp_Source_files);
+        // console.log('Assessment Source Files:', Exp_Source_files);
 
         if (Exp_Source_files.length == 0) {
             const jsonResponse = { message: 'No JSON file present in REPO' };
@@ -167,7 +167,7 @@ const get_github = async (req, res) => {
                     });
                 }
 
-                console.log(jsonData);
+                // console.log(jsonData);
 
                 const postResponse = await fetch('https://vlabs-question-bank.el.r.appspot.com/api/questions', {
                     method: 'POST',
@@ -180,7 +180,7 @@ const get_github = async (req, res) => {
 
                 if (!postResponse.ok) {
                     console.error(`Failed to post data: ${postResponse.statusText}`);
-                    console.log(sourceFile);
+                    // console.log(sourceFile);
                     return null;
                 }
 

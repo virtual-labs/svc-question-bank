@@ -57,7 +57,7 @@ async function scrypt(password, salt, rounds, memCost, signerKey) {
 const admin = require('firebase-admin');
 
 // Initialize the Firebase Admin SDK with your Firebase project credentials
-const serviceAccount="./my_firebase.json"
+const serviceAccount="../my_firebase.json"
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
 //   databaseURL: 'https://your-firebase-project.firebaseio.com'

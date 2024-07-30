@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 // const fetch = require('node-fetch');
-const middleware = require('./middleware/index.js');
+const middleware = require('../middleware/index.js');
 const { db, admin } = require('./firebase.js');
 
 const collectionRef = db.collection('questions');
@@ -23,12 +23,12 @@ app.use(express.json()); // Parse JSON bodies
 app.use(middleware.decodeToken);
 
 
-const { get_search_and_difficulty } = require('./Route_Handlers/get_multiple.js');
-const { get_id } = require('./Route_Handlers/get_single.js');
-const { post_questions } = require('./Route_Handlers/post.js');
-const { delete_ques } = require('./Route_Handlers/delete.js');
-const { update_ques } = require('./Route_Handlers/update.js');
-const { get_github } = require('./Route_Handlers/get_github.js');
+const { get_search_and_difficulty } = require('../RouteHandlers/get_multiple.js');
+const { get_id } = require('../RouteHandlers/get_single.js');
+const { post_questions } = require('../RouteHandlers/post.js');
+const { delete_ques } = require('../RouteHandlers/delete.js');
+const { update_ques } = require('../RouteHandlers/update.js');
+const { get_github } = require('../RouteHandlers/get_github.js');
 
 // Defining Routes
 app.get('/api/questions', get_search_and_difficulty);

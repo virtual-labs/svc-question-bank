@@ -1,5 +1,5 @@
 
-const { db, admin } = require('../firebase');
+const { db, admin } = require('../server/firebase');
 class Middleware {
     async decodeToken(req, res, next) {
         // console.log(req.headers.authorization);

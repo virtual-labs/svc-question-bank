@@ -28,7 +28,7 @@ function validateV1(question) {
       Object.keys(explanations).length === 4 && // Ensure explanations object has exactly 4 keys
       Object.values(explanations).every(explanation => typeof explanation === 'string' && explanation.trim().length > 0) && // Check explanations are non-empty strings
       correctAnswer &&
-      [1, 2, 3, 4].includes(correctAnswer)
+      ([1, 2, 3, 4].includes(correctAnswer) || ["a", "b", "c", "d"].includes(correctAnswer))
     );
   }
   

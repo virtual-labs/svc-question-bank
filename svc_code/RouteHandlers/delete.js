@@ -1,4 +1,4 @@
-const {db}=require('../firebase');
+const {db}=require('../server/firebase');
 
 const delete_ques= async (req, res) => {
     try {

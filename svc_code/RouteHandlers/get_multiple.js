@@ -1,4 +1,4 @@
-const { db } = require("../firebase.js");
+const { db } = require("../server/firebase.js");
 
 const get_search_and_difficulty = async (req, res) => {
 
